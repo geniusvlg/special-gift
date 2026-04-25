@@ -1792,7 +1792,26 @@
 
       transformGallery(targets.sphere, 2000);
 
-      renderer.domElement.addEventListener('click', function() {
+      function isClickOnGalleryTile(event) {
+        if (event.target.closest && event.target.closest('.element')) return true;
+
+        var tiles = renderer.domElement.querySelectorAll('.element');
+        for (var i = 0; i < tiles.length; i++) {
+          var rect = tiles[i].getBoundingClientRect();
+          if (
+            event.clientX >= rect.left &&
+            event.clientX <= rect.right &&
+            event.clientY >= rect.top &&
+            event.clientY <= rect.bottom
+          ) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      renderer.domElement.addEventListener('click', function(event) {
+        if (!isClickOnGalleryTile(event)) return;
         if (isAnimating) return;
         isAnimating = true;
 
